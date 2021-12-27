@@ -122,8 +122,6 @@ def main(ascii_start, ascii_stop, x_gap, y_gap, chr_width, chr_height, input_img
         colour_combinations = list(filter(lambda x: x[1].name == "white", colour_combinations))
     elif not coloured_background:
         colour_combinations = list(filter(lambda x: x[1].name == "black", colour_combinations))
-    else:
-        colour_combinations = [(colours[-1], colours[0])]
 
     if not coloured_foreground:
         text_colour = "white" if not light_background else "black"
