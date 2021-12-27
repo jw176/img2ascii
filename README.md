@@ -68,7 +68,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Author
 Jack Whelan
 
-You can find me on [LinkedIn](www.linkedin.com/in/jack-whelan-1707491aa) 
+You can find me on [LinkedIn](https://www.linkedin.com/in/jack-whelan-1707491aa) 
 
 ## License
 This project is licensed under the [MIT](LICENSE) License.
