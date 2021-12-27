@@ -24,8 +24,6 @@ colours = [
     Color(name="cyan", fore=Fore.CYAN, back=Back.CYAN),
     Color(name="white", fore=Fore.WHITE, back=Back.WHITE)
 ]
-# colour_combinations = [(colors[-1], colors[0]), (colors[6], colors[0]), (colors[3], colors[0])
-# colour_combinations = [(colors[-1], colors[0])]
 
 
 def get_font_bitmap(colours, ascii_start=32, ascii_stop=127):
@@ -35,7 +33,6 @@ def get_font_bitmap(colours, ascii_start=32, ascii_stop=127):
         for j, (fore, back) in enumerate(colours):
             chr_bitmap = get_char_bitmap(chr(i), font, fore, back)
             bitmaps[i - ascii_start, j] = chr_bitmap
-    # np.save("test.npy", bitmaps)
     return bitmaps
 
 
@@ -116,18 +113,21 @@ def get_string_representation(index_data, ascii_start, colour_combinations):
 
 
 def main(ascii_start, ascii_stop, x_gap, y_gap, chr_width, chr_height, input_img, width=None, height=None,
-         output_file=None, to_print=True, color=False, light_background=False, coloured_background=False):
+         output_file=None, to_print=True, coloured_foreground=False, light_background=False, coloured_background=False):
 
-    if color:
-        colour_combinations = list(itertools.combinations(colours, 2)) + list(itertools.combinations(colours[::-1], 2))
-        colour_combinations = list(set(colour_combinations))
+    colour_combinations = list(itertools.combinations(colours, 2)) + list(itertools.combinations(colours[::-1], 2))
+    colour_combinations = list(set(colour_combinations))
 
-        if light_background:
-            colour_combinations = list(filter(lambda x: x[1].name == "white", colour_combinations))
-        elif not coloured_background:
-            colour_combinations = list(filter(lambda x: x[1].name == "black", colour_combinations))
+    if light_background:
+        colour_combinations = list(filter(lambda x: x[1].name == "white", colour_combinations))
+    elif not coloured_background:
+        colour_combinations = list(filter(lambda x: x[1].name == "black", colour_combinations))
     else:
         colour_combinations = [(colours[-1], colours[0])]
+
+    if not coloured_foreground:
+        text_colour = "white" if not light_background else "black"
+        colour_combinations = list(filter(lambda x: x[0].name == text_colour, colour_combinations))
 
     chr_bitmaps = get_font_bitmap(colour_combinations, ascii_start=ascii_start, ascii_stop=ascii_stop)
 
@@ -159,19 +159,16 @@ if __name__ == '__main__':
     parser.add_argument('--ascii-stop', '--stop', type=int, default=126, help="The end value of the ascii characters")
     parser.add_argument('--output', '-o', type=str, default=32, help="Optional output file to save as image")
 
-    parser.set_defaults(use_colour=False)
-    parser.set_defaults(coloured_background=False)
-    parser.set_defaults(light_background=False)
-    parser.add_argument('--use-colour', '-c', dest='use_colour', action='store_true',
+    parser.add_argument('--coloured-foreground', '-cf', dest='coloured_foreground', action='store_true',
                         help="Use coloured printing to the terminal")
-    parser.add_argument('--colour-background', '-cb', dest='coloured_background', action='store_true',
-                        help="Use coloured background when printing the characters")
-    parser.add_argument('--light', '-l', dest='light_background', action='store_true',
-                        help="Use a light background when printing")
 
-    ascii_start = 32
-    ascii_stop = 126
-    # ascii_stop = 255
+    group = parser.add_mutually_exclusive_group(required=False)
+    group.add_argument('--colour-background', '-cb', dest='coloured_background', action='store_true',
+                       help="Use coloured background when printing")
+    group.add_argument('--light-background', '-lb', dest='light_background', action='store_true',
+                       help="Use a light background when printing")
+    group.add_argument('--dark-background', '-db', dest='dark_background', action='store_true',
+                       help="Use a dark background when printing")
 
     x_gap = 4
     y_gap = 10
@@ -179,10 +176,8 @@ if __name__ == '__main__':
     chr_height = 16
 
     args = parser.parse_args()
-
     print(args)
 
-    main(args.ascii_start, args.ascii_stop, x_gap, y_gap, chr_width, chr_height, args.source, color=args.use_colour,
-         light_background=args.light_background, coloured_background=args.coloured_background)
-
-    # go through each section of the image and compare with each character to choose the most optimal
+    main(args.ascii_start, args.ascii_stop, x_gap, y_gap, chr_width, chr_height, args.source,
+         coloured_foreground=args.coloured_foreground, light_background=args.light_background,
+         coloured_background=args.coloured_background)
