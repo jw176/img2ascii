@@ -1,31 +1,19 @@
 # img2ascii
 Transform an image into an ascii representation.
 
-![](readme_assets/Mario.gif)
+![](readme_assets/demonstration.gif)
 
 ## Installation
 
-First clone the github repository
+Clone the github repository and then run the following command in the root directory to install the python dependencies.
 
-```bash
-git clone https://github.com/jw176/img2ascii.git
 ```
-
-Navigate to the project
-
-```bash
-cd img2ascii
-```
-
-Install the required python packages
-
-```bash
 pip install -r requirements.txt
 ```
 
 ## Usage
 
-```bash
+```
 usage: main.py [-h] [--ascii-start ASCII_START] [--ascii-stop ASCII_STOP] [--output OUTPUT] [--coloured-foreground] [--colour-background | --light-background | --dark-background] source
 
 Convert an image into ascii art.
@@ -50,10 +38,6 @@ optional arguments:
   --dark-background, -db
                         Use a dark background when printing
 ```
-
-## How it works
-
-TODO
 
 ## Libraries used
 
