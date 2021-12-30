@@ -1,5 +1,5 @@
 # img2ascii
-Transform an image into an ascii representation.
+Transform an image into an ascii representation. Supports colours also.
 
 ![](readme_assets/demonstration.gif)
 
